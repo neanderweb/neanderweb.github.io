@@ -27,39 +27,53 @@ export function calculateInstructionSize(line) {
 }
 
 export function highlightSyntax(text, state, ui) {
-    const boundChar = '\n';
-    let highlightedText = text + boundChar;
-
-    highlightedText = highlightedText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    let escapedText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     
     const simpleRegex = new RegExp(`\\b(${CONSTANTS.SIMPLE_INSTRUCTIONS.join('|')})\\b`, 'gi');
     const operandRegex = new RegExp(`\\b(${CONSTANTS.OPERAND_INSTRUCTIONS.join('|')})\\b`, 'gi');
 
-    highlightedText = highlightedText.replace(simpleRegex, (match) => {
-        const upperMatch = match.toUpperCase();
-        if (isInstructionVisible(upperMatch, state.currentModule)) {
-            if (CONSTANTS.VECTOR_INSTRUCTIONS.includes(upperMatch)) {
-                return `<span class="instr-vector">${match}</span>`;
-            }
-            return `<span class="instr-simple">${match}</span>`;
+    const lines = escapedText.split('\n');
+    const highlightedLines = lines.map(line => {
+        const commentIndex = line.indexOf(';');
+        let codePart = line;
+        let commentPart = '';
+
+        // separa codigo do comentario
+        if (commentIndex !== -1) {
+            codePart = line.substring(0, commentIndex);
+            commentPart = line.substring(commentIndex);
         }
-        return match;
+
+        codePart = codePart.replace(simpleRegex, (match) => {
+            const upperMatch = match.toUpperCase();
+            if (isInstructionVisible(upperMatch, state.currentModule)) {
+                if (CONSTANTS.VECTOR_INSTRUCTIONS.includes(upperMatch)) {
+                    return `<span class="instr-vector">${match}</span>`;
+                }
+                return `<span class="instr-simple">${match}</span>`;
+            }
+            return match;
+        });
+
+        codePart = codePart.replace(operandRegex, (match) => {
+            const upperMatch = match.toUpperCase();
+            if (isInstructionVisible(upperMatch, state.currentModule)) {
+                if (CONSTANTS.VECTOR_INSTRUCTIONS.includes(upperMatch)) {
+                    return `<span class="instr-vector">${match}</span>`;
+                }
+                return `<span class="instr-operand">${match}</span>`;
+            }
+            return match;
+        });
+        
+        // reconstroi a linha botando a cor correta de forma isolada do comentario
+        if (commentPart) {
+            return codePart + `<span class="comment">${commentPart}</span>`;
+        }
+        return codePart;
     });
 
-    highlightedText = highlightedText.replace(operandRegex, (match) => {
-        const upperMatch = match.toUpperCase();
-        if (isInstructionVisible(upperMatch, state.currentModule)) {
-            if (CONSTANTS.VECTOR_INSTRUCTIONS.includes(upperMatch)) {
-                return `<span class="instr-vector">${match}</span>`;
-            }
-            return `<span class="instr-operand">${match}</span>`;
-        }
-        return match;
-    });
-    
-    highlightedText = highlightedText.replace(/;.*/g, '<span class="comment">$&</span>');
-    
-    ui.highlightingCode.innerHTML = highlightedText;
+    ui.highlightingCode.innerHTML = highlightedLines.join('\n') + '\n';
 }
 
 export function highlightMemory(state, memorySize, displayBase) {

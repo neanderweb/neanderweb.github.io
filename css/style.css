@@ -96,8 +96,11 @@ body {
     background-color: var(--bg-topbar);
     color: var(--text-topbar);
     display: flex;
-    padding: 20px;
+    padding: 15px 20px;
     flex-shrink: 0;
+    flex-wrap: wrap; /* expansao fluida da barra para baixo em telas pequenas */
+    align-items: center;
+    gap: 15px; /* distanciamento */
 }
 
 .main-content {
@@ -111,7 +114,6 @@ body {
 
 .menu-item {
     position: relative;
-    margin-right: 20px;
     cursor: pointer;
 }
 .dropdown {
@@ -351,9 +353,7 @@ body {
     border: none;
     border-radius: 5px;
     color: white;
-    position: absolute;
-    right: 10px;
-    top: 20px;
+    position: relative;
 }
 
 .theme-switch {
@@ -363,11 +363,10 @@ body {
     border: 1px solid #555;
     border-radius: 5px;
     color: white;
-    position: absolute;
-    right: 60px;
-    top: 20px;
     font-size: 1.2em;
     line-height: 28px;
+    position: relative;
+    margin-left: auto; /* empurra ele mesmo e o idioma para a direita */
 }
 
 .about-info {
@@ -561,18 +560,21 @@ body {
     font-weight: bold;
 }
 
-@media (max-width: 768px) {
+/* muda do 768px para 1024px pra empilhar a visualização mais cedo */
+@media (max-width: 1024px) {
     .main-content {
         padding: 10px;
         overflow-y: auto;
     }
     .editors {
         flex-direction: column;
-        min-height: 400px;
+        min-height: 600px; /* espaco quando a tela quebra verticalmente */
     }
     .editor-wrapper, .grid-wrapper {
         width: 100% !important;
-        height: 50%;
+        height: auto !important;
+        flex: 1 1 50%; /* isso deixa mais responsivo */
+        min-height: 250px;
     }
     .resizer {
         display: none; 
