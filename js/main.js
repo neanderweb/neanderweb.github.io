@@ -8,10 +8,12 @@ import { calculateInstructionSize } from './assembler.js';
 import { themeConfig } from './theme-config.js';
 
 async function main() {
-    // inicia o tema baseado no sistema (ta no state.js)
+// inicia o tema baseado no sistema (ta no state.js)
     if (state.currentTheme === 'dark') {
         document.body.classList.add('dark-mode');
         ui.themeSwitch.textContent = '☀️';
+    } else {
+        ui.themeSwitch.textContent = '🌙';
     }
 
     // aplica as configuracoes de cores do novo arquivo
@@ -38,7 +40,6 @@ HLT
     for (const line of lines) {
         memUsed += calculateInstructionSize(line);
     }
-
     if (memUsed < CONSTANTS.MEMORY_SIZE) {
         const remainingLines = CONSTANTS.MEMORY_SIZE - memUsed;
         initialContent += '\n'.repeat(remainingLines);
@@ -49,6 +50,7 @@ HLT
     setModule(state.currentModule, state, ui);
     handleEditorInput(state, ui);
     resetState(state, ui, CONSTANTS.I_CACHE_SIZE, CONSTANTS.D_CACHE_SIZE, CONSTANTS.VECTOR_REG_SIZE);
+
     logMessage('init', state, ui);
 }
 

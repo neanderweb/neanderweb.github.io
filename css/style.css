@@ -88,18 +88,50 @@ body {
     color: var(--text-main);
     display: flex;
     flex-direction: column;
+    /* ajuste tela mobile */
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
 .top-bar {
     width: 100%;
+    position: relative; /* importante menu absoluto mobile */
     background-color: var(--bg-topbar);
     color: var(--text-topbar);
     display: flex;
     padding: 10px 20px;
     flex-shrink: 0;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+}
+
+/* hamburguer escondido no pc */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.hamburger:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.hamburger span {
+    width: 24px;
+    height: 3px;
+    background-color: var(--text-topbar);
+    border-radius: 3px;
+}
+
+/* links de navegacao */
+.nav-menu {
+    display: flex;
     align-items: center;
     gap: 15px;
 }
@@ -285,7 +317,7 @@ body {
 }
 
 .editor-wrapper {
-    width: calc(50% - 15px); /* agora a barra do meio ESTA no meio */
+    width: calc(50% - 15px);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -335,7 +367,7 @@ body {
     border: 2px solid var(--border-color);
     border-radius: 10px;
     box-shadow: 0px 4px 10px var(--shadow-color);
-    overflow: hidden;
+    overflow: auto;
 }
 
 .memory-cell {
@@ -502,7 +534,6 @@ body {
     color: red;
 }
 
-
 /* caches */
 .cache-container {
     display: flex;
@@ -581,8 +612,8 @@ body {
 .info-value {
     font-family: monospace;
 }
-/* ------------------------------------- */
 
+/* ------------------------------------- */
 .log-container {
     height: 140px;
     background-color: var(--bg-white);
@@ -669,30 +700,83 @@ body {
     font-weight: bold;
 }
 
+/* ajustes mobile */
 @media (max-width: 1024px) {
+    /* hmmmmmmmm hamburge */
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 20px;
+        background-color: var(--bg-topbar);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px var(--shadow-color);
+        z-index: 100;
+        gap: 5px;
+        min-width: 160px;
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .menu-item {
+        width: 100%;
+    }
+
+    /* dropdown abre para a direita */
+    .dropdown {
+        top: 0;
+        left: 100%;
+    }
+
+    .menu-item::after {
+        top: 0;
+        left: 100%;
+        width: 10px;
+        height: 100%;
+    }
+
     .main-content {
         padding: 10px;
+        /* espaco extra no final para o rodape do navegador */
+        padding-bottom: 25px;
         overflow-y: auto;
     }
+
     .editors {
         flex-direction: column;
         min-height: 600px;
+        /* espaco entre o editor e a visualizacao */
+        gap: 15px; 
     }
+
     .editor-wrapper, .grid-wrapper {
         width: 100% !important;
         height: auto !important;
         flex: 1 1 50%;
         min-height: 250px;
     }
+
     .resizer {
         display: none; 
     }
+
     .top-bar {
         padding: 10px;
     }
+
     .cache-container {
         flex-direction: column;
     }
+
     .cache-box {
         width: 100%;
     }

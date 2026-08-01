@@ -31,6 +31,9 @@ export const ui = {
     coresModal: document.getElementById('cores-modal'),
     overlay: document.getElementById('overlay'),
     
+    hamburgerBtn: document.getElementById('hamburger-btn'),
+    navMenu: document.getElementById('nav-menu'),
+
     languageSwitch: document.getElementById('language-switch'),
     themeSwitch: document.getElementById('theme-switch'),
     

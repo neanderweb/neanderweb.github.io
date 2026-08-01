@@ -36,7 +36,6 @@ export function runProgram(state, ui) {
     clearLog(ui.logContainer);
     assembleCode(state, ui.inputLeft.value, CONSTANTS.MEMORY_SIZE);
     resetState(state, ui, CONSTANTS.I_CACHE_SIZE, CONSTANTS.D_CACHE_SIZE, CONSTANTS.VECTOR_REG_SIZE);
-
     let steps = 0;
     while (steps < CONSTANTS.INFINITE_LOOP_THRESHOLD) {
         if (executeSingleInstruction(state, ui, CONSTANTS.MEMORY_SIZE) === 'HALT') {
@@ -44,11 +43,9 @@ export function runProgram(state, ui) {
         }
         steps++;
     }
-
     if (steps >= CONSTANTS.INFINITE_LOOP_THRESHOLD) {
         logMessage('errorInfiniteLoop', state, ui);
     }
-
     highlightMemory(state, CONSTANTS.MEMORY_SIZE, state.displayBase);
 
     // atualiza a janela de cores ao vivo se ela estiver aberta ao rodar
@@ -75,7 +72,7 @@ export function executeStep(state, ui) {
     }
     
     highlightMemory(state, CONSTANTS.MEMORY_SIZE, state.displayBase);
-
+    
     // atualiza a janela de cores ao vivo se ela estiver aberta
     if (ui.coresModal.style.display === 'block') {
         populateCoresModal(state, ui);
@@ -130,6 +127,7 @@ export function convertLeftEditor(newBase, state, ui) {
     updateVbUI(state.vb, state.displayBase, ui.vbValue);
     updateCacheUI(state.iCache, state.dCache, state.displayBase, ui.icacheHits, ui.icacheMisses, ui.icacheTag, ui.icacheData, ui.dcacheHits, ui.dcacheMisses, ui.dcacheTag, ui.dcacheData);
     updateBaseUI(state.displayBase, ui.baseDisplay);
+
     updateLeftLineCounter(ui.inputLeft.value, state.leftInputBase, state.displayBase, ui.outputLeft, CONSTANTS.MEMORY_SIZE);
     highlightMemory(state, CONSTANTS.MEMORY_SIZE, state.displayBase);
 }
@@ -142,6 +140,7 @@ export function loadFile(state, ui) {
     fileInput.onchange = e => {
         const file = e.target.files[0];
         if (!file) return;
+
         const reader = new FileReader();
         reader.onload = ev => {
             let content = ev.target.result;
@@ -163,6 +162,7 @@ export function loadFile(state, ui) {
             ui.inputLeft.value = content;
             
             handleEditorInput(state, ui);
+
             const acResult = updateAcUI(state.ac, state.zeroFlag, state.negativeFlag, state.displayBase, ui.acValue, ui.nFlagBox, ui.zFlagBox);
             state.ac = acResult.ac;
             state.zeroFlag = acResult.zeroFlag;
@@ -278,9 +278,35 @@ export function bindEventListeners(state, ui) {
         });
     });
 
+    // menu mobile (hamburguer)
+    if (ui.hamburgerBtn) {
+        ui.hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            ui.navMenu.classList.toggle('active');
+        });
+    }
+
+    // fecha o menu hamburguer ao clicar fora dele
+    document.addEventListener('click', (e) => {
+        if (ui.navMenu && ui.navMenu.classList.contains('active')) {
+            if (!ui.navMenu.contains(e.target) && !ui.hamburgerBtn.contains(e.target)) {
+                ui.navMenu.classList.remove('active');
+            }
+        }
+    });
+
+    // fecha o menu hamburguer quando interage com um botão final de menu
+    if (ui.navMenu) {
+        ui.navMenu.addEventListener('click', (e) => {
+            const isActionItem = e.target.tagName === 'BUTTON' || e.target.id === 'modules-btn' || e.target.id === 'help-btn' || e.target.id === 'about-btn';
+            if (isActionItem && window.innerWidth <= 1024) {
+                ui.navMenu.classList.remove('active');
+            }
+        });
+    }
+
     // resizer
     let isDragging = false;
-
     ui.resizer.addEventListener('mousedown', (e) => {
         isDragging = true;
         ui.resizer.classList.add('dragging');
