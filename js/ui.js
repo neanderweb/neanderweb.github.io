@@ -9,6 +9,7 @@ export const ui = {
     editorWrapper: document.getElementById('editor-wrapper'),
     gridWrapper: document.getElementById('grid-wrapper'),
     resizer: document.getElementById('drag-resizer'),
+
     acValue: document.getElementById('ac-value'),
     bValue: document.getElementById('b-value'),
     pcValue: document.getElementById('pc-value'),
@@ -20,15 +21,19 @@ export const ui = {
     baseDisplay: document.getElementById('base-display'),
     nFlagBox: document.getElementById('n-flag-box'),
     zFlagBox: document.getElementById('z-flag-box'),
+    
     logContainer: document.getElementById('log-container'),
     stepControls: document.getElementById('step-controls'),
+    
     aboutModal: document.getElementById('about-modal'),
     helpModal: document.getElementById('help-modal'),
     modulesModal: document.getElementById('modules-modal'),
     coresModal: document.getElementById('cores-modal'),
     overlay: document.getElementById('overlay'),
+    
     languageSwitch: document.getElementById('language-switch'),
     themeSwitch: document.getElementById('theme-switch'),
+    
     btnRunProg: document.getElementById('btnRunProg'),
     btnStep: document.getElementById('btnStep'),
     btnClear: document.getElementById('btnClear'),
@@ -46,27 +51,34 @@ export const ui = {
     btnCores: document.getElementById('btnCores'),
     btnLoad: document.getElementById('btnLoad'),
     btnSave: document.getElementById('btnSave'),
+    
     fileMenuLabel: document.querySelector('#file .menu-label'),
     viewMenuLabel: document.querySelector('#view .menu-label'),
     runMenuLabel: document.querySelector('#run .menu-label'),
+
     icacheHits: document.getElementById('icache-hits'),
     icacheMisses: document.getElementById('icache-misses'),
     icacheTag: document.getElementById('icache-tag'),
     icacheData: document.getElementById('icache-data'),
+    
     dcacheHits: document.getElementById('dcache-hits'),
     dcacheMisses: document.getElementById('dcache-misses'),
     dcacheTag: document.getElementById('dcache-tag'),
     dcacheData: document.getElementById('dcache-data'),
+
+    aboutTitle: document.getElementById('about-title'),
     helpTitle: document.getElementById('help-title'),
     helpContent: document.getElementById('help-content'),
     modulesTitle: document.getElementById('modules-title'),
     modulesDesc: document.getElementById('modules-desc'),
     coresTitle: document.getElementById('cores-title'),
     coresContent: document.getElementById('cores-content'),
+
     moduleClassicLabel: document.getElementById('module-classic-label'),
     moduleVLabel: document.getElementById('module-v-label'),
     moduleExpandedLabel: document.getElementById('module-expanded-label'),
     moduleRadioButtons: document.querySelectorAll('input[name="module-select"]'),
+
     vaBox: document.getElementById('va-box'),
     bBox: document.getElementById('b-box'),
     ixBox: document.getElementById('ix-box'),
@@ -98,7 +110,7 @@ export function updateAcUI(ac, zeroFlag, negativeFlag, displayBase, acValue, nFl
         zeroFlag = (ac === 0);
         negativeFlag = ((ac & 0x80) !== 0);
     }
-
+    
     acValue.textContent = formatNumber(ac, displayBase);
     
     nFlagBox.classList.toggle('active', negativeFlag);
@@ -194,6 +206,7 @@ export function createMemoryGrid(memoryGrid, memorySize) {
 // aplica os esquemas de cores de acordo com o modo escuro ou claro
 export function applySyntaxColors(theme, syntaxColors) {
     if (!syntaxColors || !syntaxColors[theme]) return;
+    
     const colors = syntaxColors[theme];
     for (const [key, value] of Object.entries(colors)) {
         document.body.style.setProperty(`--${key}`, value);

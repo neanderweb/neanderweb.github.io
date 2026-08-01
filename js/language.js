@@ -30,11 +30,15 @@ export function updateUIWithLanguage(state, ui, populateHelpModal) {
     ui.btnModules.textContent = strings.modulesMenu;
     
     ui.btnAbout.textContent = strings.aboutBtn;
+    if (ui.aboutTitle) ui.aboutTitle.textContent = strings.aboutTitle;
+
     ui.btnHelp.textContent = strings.helpBtn;
     ui.languageSwitch.textContent = strings.langSwitch;
+    
     ui.btnRunProg.textContent = strings.runProgBtn;
     ui.btnStep.textContent = strings.stepBtn;
     ui.btnClear.textContent = strings.clearBtn;
+    
     ui.btnLoad.textContent = strings.loadBtn;
     ui.btnSave.textContent = strings.saveBtn;
     
@@ -83,16 +87,17 @@ export function populateHelpModal(state, ui) {
             </tr>
         `;
     });
-
     tableHTML += '</tbody></table>';
 
     // atalhos
     if (helpData.shortcuts && helpData.shortcutsTitle && helpData.shortcutHeaders) {
         tableHTML += `<h3 style="margin-top: 25px; margin-bottom: 10px; text-align: center;">${helpData.shortcutsTitle}</h3>`;
         tableHTML += `<table><thead><tr><th>${helpData.shortcutHeaders[0]}</th><th>${helpData.shortcutHeaders[1]}</th></tr></thead><tbody>`;
+        
         helpData.shortcuts.forEach(shortcut => {
             tableHTML += `<tr><td><code style="color: var(--text-main);">${shortcut.key}</code></td><td>${shortcut.desc}</td></tr>`;
         });
+        
         tableHTML += '</tbody></table>';
     }
 
@@ -106,11 +111,13 @@ export function logMessage(key, state, ui, ...args) {
         ui.logContainer.scrollTop = ui.logContainer.scrollHeight;
         return;
     }
+
     let formattedMessage = messageTemplate;
     for (let i = 0; i < args.length; i++) {
         const formattedArg = (typeof args[i] === 'number') ? (state.displayBase === 10 ? String(args[i]) : args[i].toString(16).toUpperCase()) : args[i];
         formattedMessage = formattedMessage.replace(`{${i}}`, formattedArg);
     }
+
     ui.logContainer.innerHTML += formattedMessage + '<br>';
     ui.logContainer.scrollTop = ui.logContainer.scrollHeight;
 }
